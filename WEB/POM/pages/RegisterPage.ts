@@ -3,22 +3,19 @@ import { Locator, Page } from "@playwright/test";
 export class registerPage {
     page: Page;
     emailInput: Locator;
-    passwordInput: Locator;
+    passInput: Locator;
     fNameInput: Locator;
     lNameInput: Locator;
-   // loginButton: Locator;
+    registerButton: Locator;
   
     constructor(page: Page) {
       this.page = page;
-       page.getByRole('link', { name: 'Register', exact: true }).click();
-       page.getByPlaceholder('First Name').click();
-       page.getByPlaceholder('Last Name').click();
-       this.emailInput = page.getByPlaceholder('E-Mail');
-       page.getByPlaceholder('Telephone').click();
-       //page.getByPlaceholder('Password', { exact: true }).click();
-       this.passwordInput = page.locator("text=password");
-       page.locator("text=confirm").click();
-       page.getByRole('button', { name: 'Continue' }).click();
+      this.emailInput= page.locator("");
+      this.passInput= page.locator("");
+      this.fNameInput= page.locator("");
+      this.lNameInput= page.locator("");
+      this.registerButton= page.locator("");
+
     }
   
     async navigate() {
@@ -35,12 +32,11 @@ export class registerPage {
       await this.page.getByPlaceholder('Telephone').click();
       await this.page.getByPlaceholder('Telephone').fill('123456789');
       await this.page.getByPlaceholder('Password', { exact: true }).click();
-      await this.page.getByPlaceholder('Password', { exact: true }).press('CapsLock');
-      await this.page.getByPlaceholder('Password', { exact: true }).fill('A');
-      await this.page.getByPlaceholder('Password', { exact: true }).press('CapsLock');
       await this.page.getByPlaceholder('Password', { exact: true }).fill('Ari123');
       await this.page.getByPlaceholder('Password Confirm').click();
       await this.page.getByPlaceholder('Password Confirm').fill('Ari123');
       await this.page.getByRole('button', { name: 'Continue' }).click();
-
+      await this.page.locator("#input-password").click(); //id:# // class=. //type= usar .getbyrole
+      await this.page.getByPlaceholder('Password', { exact: true }).fill('Ari123');
+    }
     }
