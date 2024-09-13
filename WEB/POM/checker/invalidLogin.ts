@@ -1,5 +1,4 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
 
 export class InvalidLogin {
   page: Page;

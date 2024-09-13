@@ -4,7 +4,7 @@ import { Locator, Page, expect } from "@playwright/test";
 export class registerSuccess {
   page: Page;
   accountRegisterOK: Locator;
-  URLAccount: string;
+  //URLAccount: string;
   URLSuccess: string;
 
   constructor(page: Page) {
@@ -12,7 +12,7 @@ export class registerSuccess {
     this.accountRegisterOK = page.getByRole("heading", {
       name: " Your Account Has Been",
     });
-    this.URLAccount = process.env.URL_HOME_LTP!;
+    //this.URLAccount = process.env.URL_HOME_LTP!;
     this.URLSuccess = process.env.URL_SUCCESS_LTP!;
   }
   async navigate() {
@@ -25,6 +25,6 @@ export class registerSuccess {
   }
   async VerifyMyAccount() {
     await this.page.getByRole("link", { name: "Continue" }).click();
-    await expect(this.URLAccount).toContain("account");
+    await expect(this.URLSuccess).toContain("account");
   }
 }

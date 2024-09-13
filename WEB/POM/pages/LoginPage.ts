@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
-//import { registerPage,infoEmail,infoPass } from "./RegisterPage";
 
 export class LoginPage {
+
   page: Page;
   emailInput: Locator;
   passwordInput: Locator;

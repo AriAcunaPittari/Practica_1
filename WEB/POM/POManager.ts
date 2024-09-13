@@ -4,6 +4,7 @@ import { InvalidLogin } from "./checker/invalidLogin";
 import { registerSuccess } from "./checker/registerSuccess";
 import { Page } from "@playwright/test";
 import { okLogin } from "./checker/validLogin";
+import { Changeinfo } from "./pages/ChangePersonalInfo";
 
 export class POManager {
   LoginPage: LoginPage;
@@ -12,6 +13,7 @@ export class POManager {
   registerSuccess: registerSuccess;
   loginOK: okLogin;
   page: Page;
+  changeInfo: Changeinfo;
   constructor(page: Page) {
     this.page = page;
     this.LoginPage = new LoginPage(this.page);
@@ -19,6 +21,7 @@ export class POManager {
     this.InvalidLogin = new InvalidLogin(this.page);
     this.registerSuccess = new registerSuccess(this.page);
     this.loginOK = new okLogin(this.page);
+    this.changeInfo = new Changeinfo(this.page);
   }
 
   getLoginPage() {
@@ -35,5 +38,8 @@ export class POManager {
   }
   getloginOK() {
     return this.loginOK;
+  }
+  getChangeInfo() {
+    return this.changeInfo;
   }
 }
