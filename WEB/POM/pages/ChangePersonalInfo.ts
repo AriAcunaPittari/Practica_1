@@ -3,26 +3,22 @@ import { Locator, Page, expect } from "@playwright/test";
 export class Changeinfo {
   page: Page;
   editButton: Locator;
-  infoEmail: string;
-  infoPass: string;
+  //infoEmail: string;
+  //infoPass: string;
   successChange: Locator;
   FirstNameChange: Locator;
   LastNameChange: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.infoEmail = process.env.EMAIL_LTP!;
-    this.infoPass = process.env.PASS_LTP!;
+    //this.infoEmail = process.env.EMAIL_LTP!;
+    //this.infoPass = process.env.PASS_LTP!;
     this.editButton = page.getByRole("link", { name: " Edit your account" });
     this.successChange = page.getByText("Success: Your account has");
     this.FirstNameChange = page.getByPlaceholder("First Name");
     this.LastNameChange = page.getByPlaceholder("Last Name");
   }
 
-  async navigate() {
-    // await this.page.goto(URL_LTP);
-    await this.page.goto(process.env.URL_HOME_LTP!);
-  }
   async ChangeInfo() {
     await this.editButton.click();
     await this.FirstNameChange.click();
