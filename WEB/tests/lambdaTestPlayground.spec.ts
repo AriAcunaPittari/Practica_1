@@ -4,7 +4,21 @@ import test from "@playwright/test";
 import { POManager } from "../pom/POManager";
 import { chromium } from "playwright";
 
-test.describe("TestCases(Registro) for LambdaTestPlayground", () => {
+test.beforeAll(async ({}) => {
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const POM = new POManager(page);
+  const loginStorage = await POM.LoginPage;
+  await loginStorage.navigate();
+  //await page.pause();
+  await loginStorage.loginStorage();
+  await context.storageState({ path: "web/context/storageLogin.json" });
+  // Close the browser after saving session
+  await browser.close();
+});
+
+test.describe.skip("TestCases(Registro) for LambdaTestPlayground", () => {
   test("Registro", async ({ page }) => {
     const POM = new POManager(page);
     const registerTest = await POM.registerPage;
@@ -32,44 +46,29 @@ test.describe("TestCases(Registro) for LambdaTestPlayground", () => {
     await loginTest.loginFail();
     //await loginFailed.VerifyEmailId();
   });
-
-  test("Change Info", async ({ page }) => {
-    const POM = new POManager(page);
-    const loginTest = await POM.LoginPage;
-    const changePersonalInfo = await POM.changeInfo;
-    await loginTest.navigate();
-    await loginTest.loginOK();
-    await changePersonalInfo.ChangeInfo();
-    await changePersonalInfo.ChangeSuccess();
-  });
-  test("Crear Orden OK", async({page})=>{
-    const POM = new POManager(page);
-    const loginTest = await POM.LoginPage;
-    await loginTest.navigate();
-    await loginTest.loginOK();
-    
-
-  });
 });
-/*test.beforeAll(async ({}) => {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  const POM = new POManager(page);
-  const loginStorage = await POM.LoginPage;
-  await loginStorage.navigate();
-  //await page.pause();
-  await loginStorage.loginStorage();
-});
+
 test.describe("TestCases(Login) for LambdaTestPlayground", () => {
   test.use({ storageState: "web/context/storageLogin.json" });
   test("Change Info", async ({ page }) => {
     const POM = new POManager(page);
     const loginTest = await POM.LoginPage;
     const changePersonalInfo = await POM.changeInfo;
-    await loginTest.navigate();
-    await loginTest.loginOK();
+    await changePersonalInfo.navigateAccount();
+    //await loginTest.loginStorage();
+    //await loginTest.loginOK();
     await changePersonalInfo.ChangeInfo();
     await changePersonalInfo.ChangeSuccess();
   });
-});*/
+  test.only("Crear Orden OK", async ({ page }) => {
+    const POM = new POManager(page);
+    const loginTest = await POM.LoginPage;
+    const createOrder = await POM.createOrder;
+    await loginTest.navigate();
+    await createOrder.viewCategory();
+    await createOrder.agregarCarritoUNO();
+    await createOrder.agregarCarritoDOS();
+    await page.pause();
+
+  });
+});

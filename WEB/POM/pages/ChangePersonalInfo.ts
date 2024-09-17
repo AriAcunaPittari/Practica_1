@@ -18,6 +18,9 @@ export class Changeinfo {
     this.FirstNameChange = page.getByPlaceholder("First Name");
     this.LastNameChange = page.getByPlaceholder("Last Name");
   }
+  async navigateAccount(){
+    await this.page.goto(process.env.URL_ACCOUNT_LTP!);
+  }
 
   async ChangeInfo() {
     await this.editButton.click();
