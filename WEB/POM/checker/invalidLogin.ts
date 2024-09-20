@@ -8,11 +8,9 @@ export class InvalidLogin {
     this.warningText = page.getByText("Warning: No match for E-Mail");
   }
   async wrongEmail() {
-    
     await expect(this.warningText).toHaveText("Warning: No match for E-Mail");
   }
   async wrongPass() {
-    
     await expect(this.warningText).toHaveText("Warning: No match for E-Mail");
   }
 }

@@ -6,6 +6,8 @@ import { Page } from "@playwright/test";
 import { okLogin } from "./checker/validLogin";
 import { Changeinfo } from "./pages/ChangePersonalInfo";
 import { CreateOrder } from "./pages/CreateOrder";
+import { testingRows } from "./pages/probandoRows";
+import test from "node:test";
 
 export class POManager {
   LoginPage: LoginPage;
@@ -16,6 +18,7 @@ export class POManager {
   page: Page;
   changeInfo: Changeinfo;
   createOrder: CreateOrder;
+  testingRows: testingRows;
   constructor(page: Page) {
     this.page = page;
     this.LoginPage = new LoginPage(this.page);
@@ -25,6 +28,7 @@ export class POManager {
     this.loginOK = new okLogin(this.page);
     this.changeInfo = new Changeinfo(this.page);
     this.createOrder = new CreateOrder(this.page);
+    this.testingRows = new testingRows(this.page);
   }
 
   getLoginPage() {
@@ -47,5 +51,8 @@ export class POManager {
   }
   getCreateOrder() {
     return this.createOrder;
+  }
+  getTestingRows(){
+    return this.testingRows;
   }
 }
