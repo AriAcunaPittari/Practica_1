@@ -6,8 +6,11 @@ import { Page } from "@playwright/test";
 import { okLogin } from "./checker/validLogin";
 import { Changeinfo } from "./pages/ChangePersonalInfo";
 import { CreateOrder } from "./pages/CreateOrder";
-import { testingRows } from "./pages/probandoRows";
-import test from "node:test";
+import { calcularCheckout } from "./pages/CalcularTotalItems";
+import { addWishList } from "./pages/AddWishlist";
+import { BuyWishlist } from "./pages/BuyFromWishlist";
+import { addReview } from "./pages/addReview";
+import { loginOut } from "./pages/Logout";
 
 export class POManager {
   LoginPage: LoginPage;
@@ -18,7 +21,12 @@ export class POManager {
   page: Page;
   changeInfo: Changeinfo;
   createOrder: CreateOrder;
-  testingRows: testingRows;
+  calcularCheckout: calcularCheckout;
+  addWishList: addWishList;
+  buyFromWishList: BuyWishlist;
+  addReview: addReview;
+  loginOut: loginOut;
+
   constructor(page: Page) {
     this.page = page;
     this.LoginPage = new LoginPage(this.page);
@@ -28,7 +36,12 @@ export class POManager {
     this.loginOK = new okLogin(this.page);
     this.changeInfo = new Changeinfo(this.page);
     this.createOrder = new CreateOrder(this.page);
-    this.testingRows = new testingRows(this.page);
+    this.calcularCheckout = new calcularCheckout(this.page);
+    this.addWishList = new addWishList(this.page);
+    this.buyFromWishList = new BuyWishlist(this.page);
+    this.addReview = new addReview(this.page);
+    this.loginOut= new loginOut(this.page);
+
   }
 
   getLoginPage() {
@@ -52,7 +65,19 @@ export class POManager {
   getCreateOrder() {
     return this.createOrder;
   }
-  getTestingRows(){
-    return this.testingRows;
+  getcalcularCheckout(){
+    return this.calcularCheckout;
+  }
+  getaddWishlist(){
+    return this.addWishList;
+  }
+  getbuyWishlist(){
+    return this.buyFromWishList;
+  }
+  getaddReview(){
+    return this.addReview;
+  }
+  getloginOut(){
+    return this.loginOut;
   }
 }

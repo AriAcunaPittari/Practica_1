@@ -4,21 +4,20 @@ import test, { expect } from "@playwright/test";
 import { POManager } from "../pom/POManager";
 import { chromium } from "playwright";
 
-test.beforeAll(async ({}) => {
+/*test.beforeAll(async ({}) => {
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
   const pom = new POManager(page);
   const loginStorage = await pom.LoginPage;
   await loginStorage.navigate();
-  //await page.pause();
   await loginStorage.loginStorage();
   await context.storageState({ path: "web/context/storageLogin.json" });
   // Close the browser after saving session
   await browser.close();
-});
+});*/
 
-test.describe.skip("TestCases(Registro) for LambdaTestPlayground", () => {
+test.describe("TestCases(Registro) for LambdaTestPlayground", () => {
   test("Registro", async ({ page }) => {
     const pom = new POManager(page);
     const registerTest = await pom.registerPage;
@@ -28,7 +27,7 @@ test.describe.skip("TestCases(Registro) for LambdaTestPlayground", () => {
     //await registerOKTest.VerifyRegisterSuccess(); //Intento de checker
     //await registerOKTest.VerifyMyAccount(); //Intento de checker
   });
-  test("Login", async ({ page }) => {
+  test.only("Login", async ({ page }) => {
     const pom = new POManager(page);
     const loginTest = await pom.LoginPage;
     const loginFailed = await pom.InvalidLogin;
@@ -48,42 +47,66 @@ test.describe.skip("TestCases(Registro) for LambdaTestPlayground", () => {
   });
 });
 
-test.describe("TestCases(Login) for LambdaTestPlayground", () => {
-  test.use({ storageState: "web/context/storageLogin.json" });
+test.describe("TestCases con logueo", () => {
+  //test.use({ storageState: "web/context/storageLogin.json" });
   test("Change Info", async ({ page }) => {
     const pom = new POManager(page);
     const loginTest = await pom.LoginPage;
     const changePersonalInfo = await pom.changeInfo;
+    await loginTest.navigate();
+    await loginTest.loginOK();
     await changePersonalInfo.navigateAccount();
-    //await loginTest.loginStorage();
-    //await loginTest.loginOK();
     await changePersonalInfo.ChangeInfo();
     await changePersonalInfo.ChangeSuccess();
   });
   test("Crear Orden Completa OK", async ({ page }) => {
+    await page.goto("https://ecommerce-playground.lambdatest.io/");
     const pom = new POManager(page);
-    const loginTest = await pom.LoginPage;
     const createOrder = await pom.createOrder;
+    const totalItemsCheckout = await pom.calcularCheckout;
+    const valueBoolean = await totalItemsCheckout.totalCheckoutFinal();
+    const loginTest = await pom.LoginPage;
     await loginTest.navigate();
+    await loginTest.loginOK();
     await createOrder.viewCategory();
     await createOrder.agregarCarritoUNO();
     await createOrder.agregarCarritoDOS();
     await createOrder.viewCart();
-    //await page.pause();
-    await createOrder.calcularTotalItems();
-    const valueBoolean = await createOrder.totalcheckout();
+    
+    await totalItemsCheckout.totalCartItems(); 
     expect(valueBoolean).toEqual(true);
     //expect(valueBoolean).toBeTruthy();
     //expect(valueBoolean).toBe(true);
     await createOrder.finalizarCompra();
     await createOrder.ordenExitosa();
+
   });
-  test.only("Testing Rows", async ({ page }) => {
+  test.only("Agregar productor al Wishlist", async ({ page }) => {
+    //await page.goto("https://ecommerce-playground.lambdatest.io/");
     const pom = new POManager(page);
-    const testingRows = await pom.testingRows;
-    
-    await page.goto("https://ecommerce-playground.lambdatest.io/index.php?route=checkout/checkout");
-    await page.pause();
-    await testingRows.totalCartAndCheckout();
+    const addWishList = await pom.addWishList;
+    const loginTest = await pom.LoginPage;
+    await loginTest.navigate();
+    await loginTest.loginOK();
+    await addWishList.goToMain();
+    await addWishList.AgregarWishlist();
+    await addWishList.goToWishlist();
+
+        //await page.pause();
   });
+  test("Comprar y filtrar producots del Wishlist", async ({ page }) => {
+    //await page.goto("https://ecommerce-playground.lambdatest.io/");
+    const pom = new POManager(page);
+    const buyWishlist = await pom.buyFromWishList;
+    const loginTest = await pom.LoginPage;
+    await loginTest.navigate();
+    await loginTest.loginOK();
+    await buyWishlist.goToWishlist();
+    await buyWishlist.buyWishList();
+    await buyWishlist.completeCheckout();
+
+
+        //await page.pause();
+  });
+  
 });

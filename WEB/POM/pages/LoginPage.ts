@@ -50,6 +50,7 @@ export class LoginPage {
         .context()
         .storageState({ path: "web/context/storageLogin.json" });
     }
+    
   }
   async loginFail() {
     await this.page.getByRole("button", { name: " My account" }).click();

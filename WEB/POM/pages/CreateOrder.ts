@@ -3,13 +3,6 @@ import { Locator, Page, expect } from "@playwright/test";
 
 export class CreateOrder {
   page: Page;
-  totalItem: number;
-  totalCart: number;
-  //totalItemLocator: Locator;
-  //quantityProduct1: Locator;
-  //unitPriceProduct1: Locator;
-  //quantityProduct2: Locator;
-  //unitPriceProduct2: Locator;
   checkoutBtn: Locator;
   addToCartONE: Locator;
   addToCartTWO: Locator;
@@ -19,18 +12,10 @@ export class CreateOrder {
   goToCategory: Locator;
   selectCategory: Locator;
   successText: Locator;
-  table: Locator;
-  rows: Locator;
  
 
   constructor(page: Page) {
     this.page = page;
-    //this.row = //table[contains(@class,'table table-bordered')]
-    this.table = page
-      .locator("div#checkout-cart")
-      .locator("table.table")
-      .locator("tbody")
-      .locator("tr");
     this.checkoutBtn = page.getByRole("link", { name: "Checkout" });
     this.addToCartONE = page.locator(".product-action > button").first();
     this.addToCartTWO = page
@@ -52,25 +37,9 @@ export class CreateOrder {
     this.successText = page.getByRole("heading", {
       name: " Your order has been placed!",
     });
-    /*this.quantityProduct1 = page.getByText("Product 1")
-    .locator("..")
-    .locator('td[class="text-left"]')
-    .nth(2)
-    .locator("input[value='1']");*
-
-    this.unitPriceProduct1 = page.getByRole("cell", { name: "$120.00" }).nth(1);
-    this.quantityProduct2 = page.getByText("Product 9")
-    .locator("..")
-    .locator('td[class="text-right"]')
-    .nth(2)
-    .locator("input[value='1']");
-
-    this.unitPriceProduct2 = page.getByRole("cell", { name: "$100.00" }).nth(2);
-    */
-    //this.totalItemLocator = this.page.locator("#checkout-total").getByText("$276.00"); // Hacer la tarea de pasarlo a Row
-    this.totalCart = 0;
-    this.totalItem = 0;
-    this.rows = page.locator("tbody tr");
+  }
+  async viewCheckout(){
+    await this.page.goto(process.env.URL_CHECKOUT_LTP!);
   }
   async viewCategory() {
     //Metodos
@@ -98,52 +67,9 @@ export class CreateOrder {
     await this.goToCart.click();
   }
 
-  async calcularTotalItems() {
-    // for (let i = 0; i < 2; i++) {
-    //   const quantity = await this.elements
-    //     .nth(i)
-    //     .locator("td.text-left")
-    //     .nth(1)
-    //     .locator("div.input-group")
-    //     .locator('input[type="number"]')
-    //     .getAttribute("value");
-    //   console.log(`La cantidad es ${quantity}`);
-    //   const unitPrice = await this.elements
-    //     .nth(i)
-    //     .locator("td.text-right")
-    //     .nth(1)
-    //     .innerText();
-    //   console.log(`La cantidad es ${unitPrice}`);
-    //   const quantityNumbONE = Number(quantity?.trim());
-    //   const unitNumbONE = parseFloat(unitPrice?.replace("$", "").trim() || "0"); // Convertir el texto a número decimal
-    //   const subTotal = quantityNumbONE * unitNumbONE;
-    //   this.totalCart = this.totalCart + subTotal;
-    // }
-    //await this.page.pause();
-    //const totalCartText = await this.totalCartLocator.textContent();
-    // this.totalCart = parseFloat(totalCartText?.replace("$", "").trim() || "0");
-    //await this.page.pause();
-    //this.totalItem = quantityONE * unitONE + quantityTWO * unitTWO;
-    //expect(this.totalItem).toBe(this.totalItem + quantityONE * quantityTWO);
-    //console.log("{totalItem}");
-  }
-  async totalcheckout() {
-    //TotalItems==TotalCart
-    await this.checkoutBtn.click();
-
-
-
-    if (this.totalItem === this.totalCart) {
-      console.log("Los totales coinciden");
-      return true;
-    } else {
-      console.log("Los totales son distintos");
-      return false;
-    }
-  }
   async finalizarCompra() {
     // Completar los datos requeridos
-    // await this.checkoutBtn.click();
+
     await this.page
       .getByRole("textbox", { name: "First Name*" })
       .fill("Ariana");
