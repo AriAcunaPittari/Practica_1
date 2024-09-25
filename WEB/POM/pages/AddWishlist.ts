@@ -48,7 +48,7 @@ export class addWishList {
         await this.productIpod.hover();
         await expect(this.addToWish).toBeVisible();
         await this.addToWish.click();
-        /*await this.productPhone.hover();
+        await this.productPhone.hover();
         await expect(this.addToWish).toBeVisible();
         await this.addToWish.click();
         await this.productOCamera.hover();
@@ -59,7 +59,7 @@ export class addWishList {
         await this.addToWish.click();
         await this.productClock.hover();
         await expect(this.addToWish).toBeVisible();
-        await this.addToWish.click();*/
+        await this.addToWish.click();
     }
 
     async goToWishlist (){

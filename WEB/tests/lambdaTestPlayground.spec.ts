@@ -27,7 +27,7 @@ test.describe("TestCases(Registro) for LambdaTestPlayground", () => {
     //await registerOKTest.VerifyRegisterSuccess(); //Intento de checker
     //await registerOKTest.VerifyMyAccount(); //Intento de checker
   });
-  test.only("Login", async ({ page }) => {
+  test("Login", async ({ page }) => {
     const pom = new POManager(page);
     const loginTest = await pom.LoginPage;
     const loginFailed = await pom.InvalidLogin;
@@ -81,7 +81,7 @@ test.describe("TestCases con logueo", () => {
     await createOrder.ordenExitosa();
 
   });
-  test.only("Agregar productor al Wishlist", async ({ page }) => {
+  test("Agregar productor al Wishlist", async ({ page }) => {
     //await page.goto("https://ecommerce-playground.lambdatest.io/");
     const pom = new POManager(page);
     const addWishList = await pom.addWishList;
@@ -107,6 +107,28 @@ test.describe("TestCases con logueo", () => {
 
 
         //await page.pause();
+  });
+  test.only("Dejar una review en un producto", async ({ page }) => {
+    const pom = new POManager(page);
+    const addReview = await pom.addReview;
+    const createOrder = await pom.createOrder;
+    const loginTest = await pom.LoginPage;
+    await loginTest.navigate();
+    await loginTest.loginOK();
+    await createOrder.viewCategory();
+    await addReview.review();
+    await addReview.sendReviewOK();
+
+
+  });
+  test("Deslogueo de cuenta", async ({ page }) => {
+    const pom = new POManager(page);
+    const loginOut = await pom.loginOut;
+    const loginTest = await pom.LoginPage;
+    await loginTest.navigate();
+    await loginTest.loginOK();
+    await loginOut.logOut();
+    await loginOut.confirmLogout();
   });
   
 });
