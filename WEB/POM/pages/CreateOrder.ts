@@ -12,10 +12,14 @@ export class CreateOrder {
   goToCategory: Locator;
   selectCategory: Locator;
   successText: Locator;
+  infoEmail: string;
+  infoPass: string;
  
 
   constructor(page: Page) {
     this.page = page;
+    this.infoEmail = process.env.EMAIL_LTP!;
+    this.infoPass = process.env.PASS_LTP!;
     this.checkoutBtn = page.getByRole("link", { name: "Checkout" });
     this.addToCartONE = page.locator(".product-action > button").first();
     this.addToCartTWO = page
@@ -69,21 +73,24 @@ export class CreateOrder {
 
   async finalizarCompra() {
     // Completar los datos requeridos
-
+    //await this.page.locator('#payment-address').getByText('I want to use a new address').check();
+    await this.page.pause();
+    //await this.page.locator('.custom-control').first().click();
     await this.page
       .getByRole("textbox", { name: "First Name*" })
       .fill("Ariana");
     await this.page
       .getByRole("textbox", { name: "Last Name*" })
       .fill("Acuña Pittari");
-    await this.page.getByRole("textbox", { name: "Company" }).click();
+    await this.page.getByPlaceholder('Telephone').fill("123456789");
+    await this.page.getByRole("textbox", { name: "Company" }).fill("Unknown");
     await this.page
       .getByRole("textbox", { name: "Address 1*" })
       .fill("RamirezTestAdress");
     await this.page
       .getByRole("textbox", { name: "City*" })
       .fill("Buenos Aires");
-    await this.page.getByRole("textbox", { name: "Post Code*" }).fill("1911");
+    await this.page.getByRole("textbox", { name: "Post Code" }).fill("1911");
     await this.page.locator("#input-payment-country").selectOption("10");
     await this.page.locator("#input-payment-zone").selectOption("156");
     await this.page
@@ -94,7 +101,7 @@ export class CreateOrder {
   }
   async ordenExitosa() {
     await this.page.goto(process.env.URL_SUCCESS_LTP!);
-    await expect(this.successText).toHaveText("Your order has been placed!");
+    await expect(this.successText).toHaveText(" Your order has been placed!");
   }
 }
 

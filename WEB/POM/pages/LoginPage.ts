@@ -23,10 +23,13 @@ export class LoginPage {
 
   async navigate() {
     // await this.page.goto(URL_LTP);
-    await this.page.goto(process.env.URL_HOME_LTP!);
+    await this.page.goto("/");
+  }
+  async navigateToLogin(){
+    await this.page.goto("https://ecommerce-playground.lambdatest.io/index.php?route=account/login");
   }
   async loginOK() {
-    await this.page.getByRole("button", { name: " My account" }).click();
+    //await this.page.getByRole("button", { name: " My account" }).click();
     //await this.page.getByRole("link", { name: "Login", exact: true }).click();
     await this.emailInput.click();
     await this.emailInput.fill(this.infoEmail);
@@ -36,7 +39,14 @@ export class LoginPage {
   }
 
   async loginStorage() {
-    await this.page.getByRole("button", { name: " My account" }).click();
+    await this.page.getByRole("button", {
+      name: " My account",
+    }).waitFor({ state: "visible" });
+    const btnMyAccount = await this.page.getByRole("button", {
+      name: " My account",
+    });
+    await btnMyAccount.waitFor({ state: "visible" });
+    await btnMyAccount.click();
     if (await this.loginButton.isVisible()) {
       //await this.page.getByRole("link", { name: "Login", exact: true }).click();
       await this.emailInput.click();
@@ -44,13 +54,12 @@ export class LoginPage {
       await this.passwordInput.click();
       await this.passwordInput.fill(this.infoPass);
       await this.loginButton.click();
-      //await this.page.pause();
+      await this.page.pause();
       //const storageState = await this.page.context().storageState();
       await this.page
         .context()
         .storageState({ path: "web/context/storageLogin.json" });
     }
-    
   }
   async loginFail() {
     await this.page.getByRole("button", { name: " My account" }).click();

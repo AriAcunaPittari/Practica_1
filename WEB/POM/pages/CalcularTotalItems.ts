@@ -24,12 +24,7 @@ export class calcularCheckout {
     await this.checkoutView.click();
     const colsCart = this.rowsCart.first().locator("td");
     console.log("ColsCART count:" + (await colsCart.count()));
-    //console.log("HeaderCART:" + (await this.headerCart.allTextContents));
     console.log("RowsCART:" + (await this.rowsCart.count()));
-
-    // const quantityONE = this.rowsCart.filter({
-    //   has: this.page.locator(""),
-    // });
     
     // for (let i = 0; i < (await this.rowsCart.count()); i++) {
     const row = await this.page.locator("#checkout-cart").locator(".table").locator("tbody").locator("tr");
@@ -58,11 +53,6 @@ export class calcularCheckout {
       this.totalCart = await this.totalCart + subTotal;
       console.log("Total:" + this.totalCart);
     }
-
-    /*const totalItemText = await this.totalCart.textContent();
-    console.log("totalitemText:" + totalItemText);
-    this.totalItem = parseFloat(totalItemText?.replace("$", "").trim() || "0");
-    console.log(this.totalItem);*/
   }
   async totalCheckoutFinal (){
     const envioLocator = await this.page.getByText("Flat Shipping Rate - $");
@@ -82,7 +72,6 @@ export class calcularCheckout {
 
     const totalCheckout = await this.page.locator("#checkout-total").locator("tbody tr").last().locator("strong").textContent();
     console.log(totalCheckout);
-    //const totalCheckoutText = await totalCheckout.textContent();
     const totalCheckoutNumber = parseFloat(
       envioText?.replace("Flat Shipping Rate - $", "").trim() || "0"
     );

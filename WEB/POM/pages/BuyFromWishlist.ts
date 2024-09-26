@@ -2,23 +2,40 @@ import { Page, Locator, expect } from "@playwright/test";
 
 export class BuyWishlist {
   page: Page;
-  tableCart: Locator;
-  rowCart: Locator;
-  addToCart: Locator;
+  table: Locator;
+  row: Locator;
+  //addToCart: Locator;
   constructor(page: Page) {
     this.page = page;
-    this.tableCart = this.page.locator("#checkout-cart");
-    this.rowCart = this.tableCart.locator("tbody");
-    this.addToCart = this.page.getByRole('row', { name: 'HTC Touch HD HTC Touch HD Product 1 In Stock $146.00  ' }).getByRole('button');
+    this.table = this.page
+      .locator(".table-responsive")
+      .locator("table.table")
+      .locator("tbody");
+    this.row = this.table.locator("tr");
+    //this.addToCart = this.row.locator("td").nth(5).locator(".button");
   }
-  async goToWishlist(){
+  async goToWishlist() {
     await this.page.goto(process.env.URL_WISHLIST_LTP!);
   }
 
-  async buyWishList () {
-
+  async buyWishList() {
+    await this.page.pause();
+    const rowList = await this.row;
+    for (let i = 0; i < (await rowList.count()); i++) {
+      const addOK = this.page.getByText("Success: You have modified");
+      const column = await rowList.nth(i).locator("td");
+      const addToCart = await column.nth(5).locator("button");
+      /*if (await this.addToCart.isVisible()) {
+        await this.addToCart.click();
+      }*/
+    }
   }
-  async completeCheckout (){
+  async completeCheckout() {
+    const goToCart = this.page.getByRole("button", { name: "4" });
+    await goToCart.waitFor({ state: "visible" });
+    await goToCart.click();
+    const goToCheckout = this.page.getByRole("button", { name: " Checkout" });
+    await goToCheckout.click();
     await this.page
       .getByRole("textbox", { name: "First Name*" })
       .fill("Ariana");
@@ -32,7 +49,7 @@ export class BuyWishlist {
     await this.page
       .getByRole("textbox", { name: "City*" })
       .fill("Buenos Aires");
-    await this.page.getByRole("textbox", { name: "Post Code*" }).fill("1911");
+    await this.page.getByRole("textbox", { name: "Post Code" }).fill("1911");
     await this.page.locator("#input-payment-country").selectOption("10");
     await this.page.locator("#input-payment-zone").selectOption("156");
     await this.page
