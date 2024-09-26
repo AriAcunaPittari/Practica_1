@@ -24,17 +24,19 @@ export class BuyWishlist {
     for (let i = 0; i < (await rowList.count()); i++) {
       const addOK = this.page.getByText("Success: You have modified");
       const column = await rowList.nth(i).locator("td");
-      const addToCart = await column.nth(5).locator("button");
+      const addToCart = await column.nth(5).getByRole('button');
+      await addToCart.click();
       /*if (await this.addToCart.isVisible()) {
         await this.addToCart.click();
       }*/
     }
   }
   async completeCheckout() {
-    const goToCart = this.page.getByRole("button", { name: "4" });
-    await goToCart.waitFor({ state: "visible" });
-    await goToCart.click();
-    const goToCheckout = this.page.getByRole("button", { name: " Checkout" });
+    //const goToCart = this.page.locator("cart-icon").locator("svg").locator("use");
+    //await this.page.pause();
+    //await goToCart.waitFor({ state: "visible" });
+    //await goToCart.click();
+    const goToCheckout = this.page.getByRole('link', { name: 'Checkout ' });
     await goToCheckout.click();
     await this.page
       .getByRole("textbox", { name: "First Name*" })
