@@ -29,7 +29,7 @@ export class LoginPage {
     await this.page.goto("https://ecommerce-playground.lambdatest.io/index.php?route=account/login");
   }
   async loginOK() {
-    //await this.page.getByRole("button", { name: " My account" }).click();
+    await this.page.getByRole("button", { name: " My account" }).click();
     //await this.page.getByRole("link", { name: "Login", exact: true }).click();
     await this.emailInput.click();
     await this.emailInput.fill(this.infoEmail);
@@ -54,7 +54,6 @@ export class LoginPage {
       await this.passwordInput.click();
       await this.passwordInput.fill(this.infoPass);
       await this.loginButton.click();
-      await this.page.pause();
       //const storageState = await this.page.context().storageState();
       await this.page
         .context()

@@ -42,6 +42,7 @@ test.describe("TestCases(Registro) for LambdaTestPlayground", () => {
   });
 });
 
+
 test.describe("TestCases con logueo", () => {
   test.use({ storageState: "web/context/storageLogin.json" });
   test("Change Info", async ({ page }) => {
@@ -62,25 +63,21 @@ test.describe("TestCases con logueo", () => {
     await createOrder.agregarCarritoUNO();
     await createOrder.agregarCarritoDOS();
     await createOrder.viewCart();
-    await totalItemsCheckout.totalCartItems(); 
+    await totalItemsCheckout.totalCartItems();
     const valueBoolean = await totalItemsCheckout.totalCheckoutFinal();
     expect(valueBoolean).toEqual(true);
     await createOrder.finalizarCompra();
     await createOrder.ordenExitosa();
-
   });
-  test("Agregar productos al Wishlist", async ({ page }) => {
+  test.only("Agregar productos al Wishlist", async ({ page }) => {
     const pom = new POManager(page);
     const addWishList = await pom.addWishList;
-    //const loginTest = await pom.LoginPage;
-    //await loginTest.navigate();
     await addWishList.goToMain();
-    //await addWishList.AgregarWishlist();
-    await addWishList.goToWishlist();
-    await page.pause();
-
+    await addWishList.AgregarWishlist();
+    await addWishList.filterWishlist();
+    //await page.pause();
   });
-  test.only("Comprar y filtrar producots del Wishlist", async ({ page }) => {
+  test("Comprar y filtrar producots del Wishlist", async ({ page }) => {
     const pom = new POManager(page);
     const buyWishlist = await pom.buyFromWishList;
     const loginTest = await pom.LoginPage;
@@ -88,7 +85,6 @@ test.describe("TestCases con logueo", () => {
     await buyWishlist.goToWishlist();
     await buyWishlist.buyWishList();
     await buyWishlist.completeCheckout();
-
   });
   test("Dejar una review en un producto", async ({ page }) => {
     const pom = new POManager(page);
@@ -99,8 +95,6 @@ test.describe("TestCases con logueo", () => {
     await createOrder.viewCategory();
     await addReview.review();
     await addReview.sendReviewOK();
-
-
   });
   test("Deslogueo de cuenta", async ({ page }) => {
     const pom = new POManager(page);
@@ -110,5 +104,4 @@ test.describe("TestCases con logueo", () => {
     await loginOut.logOut();
     await loginOut.confirmLogout();
   });
-  
 });

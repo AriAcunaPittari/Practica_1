@@ -14,7 +14,18 @@ export class CreateOrder {
   successText: Locator;
   infoEmail: string;
   infoPass: string;
- 
+  inputFirstName: Locator;
+  inputLastName: Locator;
+  company: Locator;
+  address: Locator;
+  city: Locator;
+  postCode: Locator;
+  inputPaymentCountry: Locator;
+  inputPaymentZone: Locator;
+  termsConditions: Locator;
+  continueBtn: Locator;
+  confirmOrderBtn: Locator;
+  phoneNumber: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -41,8 +52,28 @@ export class CreateOrder {
     this.successText = page.getByRole("heading", {
       name: " Your order has been placed!",
     });
+    this.inputFirstName = this.page.getByRole("textbox", {
+      name: "First Name*",
+    });
+    this.inputLastName = this.page.getByRole("textbox", {
+      name: "Last Name*",
+    });
+    this.company = this.page.getByRole("textbox", { name: "Company" });
+    this.address = this.page.getByRole("textbox", { name: "Address 1*" });
+    this.city = this.page.getByRole("textbox", { name: "City*" });
+    this.postCode = this.page.getByRole("textbox", { name: "Post Code" });
+    this.inputPaymentCountry = this.page.locator("#input-payment-country");
+    this.inputPaymentZone = this.page.locator("#input-payment-zone");
+    this.termsConditions = this.page.getByText(
+      "I have read and agree to the Terms & Conditions"
+    );
+    this.continueBtn = this.page.getByRole("button", { name: "Continue " });
+    this.confirmOrderBtn = this.page.getByRole("button", {
+      name: "Confirm Order ",
+    });
+    this.phoneNumber = this.page.getByPlaceholder("Telephone");
   }
-  async viewCheckout(){
+  async viewCheckout() {
     await this.page.goto(process.env.URL_CHECKOUT_LTP!);
   }
   async viewCategory() {
@@ -74,126 +105,28 @@ export class CreateOrder {
   async finalizarCompra() {
     // Completar los datos requeridos
     //await this.page.locator('#payment-address').getByText('I want to use a new address').check();
-    await this.page.pause();
+    //await this.page.pause();
     //await this.page.locator('.custom-control').first().click();
-    await this.page
-      .getByRole("textbox", { name: "First Name*" })
-      .fill("Ariana");
-    await this.page
-      .getByRole("textbox", { name: "Last Name*" })
-      .fill("Acuña Pittari");
-    await this.page.getByPlaceholder('Telephone').fill("123456789");
-    await this.page.getByRole("textbox", { name: "Company" }).fill("Unknown");
-    await this.page
-      .getByRole("textbox", { name: "Address 1*" })
-      .fill("RamirezTestAdress");
-    await this.page
-      .getByRole("textbox", { name: "City*" })
-      .fill("Buenos Aires");
-    await this.page.getByRole("textbox", { name: "Post Code" }).fill("1911");
-    await this.page.locator("#input-payment-country").selectOption("10");
-    await this.page.locator("#input-payment-zone").selectOption("156");
-    await this.page
-      .getByText("I have read and agree to the Terms & Conditions")
-      .click();
-    await this.page.getByRole("button", { name: "Continue " }).click();
-    await this.page.getByRole("button", { name: "Confirm Order " }).click();
+    if (await this.inputFirstName.isVisible()) {
+      await this.inputFirstName.fill("Ariana");
+      await this.inputLastName.fill("Acuña Pittari");
+      await this.company.fill("Unknown");
+      await this.address.fill("RamirezTestAdress");
+      await this.city.fill("Buenos Aires");
+      await this.postCode.fill("1911");
+      await this.inputPaymentCountry.selectOption("10");
+      await this.inputPaymentZone.selectOption("156");
+      await this.termsConditions.click();
+      await this.continueBtn.click();
+      await this.confirmOrderBtn.click();
+    } else {
+      await this.termsConditions.click();
+      await this.continueBtn.click();
+      await this.confirmOrderBtn.click();
+    }
   }
   async ordenExitosa() {
     await this.page.goto(process.env.URL_SUCCESS_LTP!);
     await expect(this.successText).toHaveText(" Your order has been placed!");
   }
 }
-
-/////////////// Codigo guardado ///////////////
-/*
-// Constructores: --------------------------------------------
-    this.quantityProduct2 = page
-      .getByText("Product 9")
-      .locator("..")
-      .locator('td[class="text-right"]')
-      .nth(2)
-      .locator('input[name="quantity\[80522\]"]');
-    this.row = page.getByText("Product 1").locator("..").locator('td[class="text-left"]').locator('div[class="input-group flex-nowrap]').locator('input[name="quantity\[80522\]"]');
-    page
-      .locator("div#checkout-cart")
-      .locator("table.table")
-      .locator("tbody")
-      .locator("tr");
-          this.quantityProduct1 = page
-      .getByText("Product 1")
-      .locator("..")
-      .locator('td[class="text-left"]')
-      .nth(2)
-      .locator('input[name="quantity\[80521\]"]');
-
-// Agregar Carrito:--------------------------------------------
-  for (let i = 0; i < 3; i++) {
-      await this.productONE.nth(i).hover();
-      await this.addToCartONE.nth(i).click();
-    }
-    await this.page.waitForTimeout(1000);
-    expect(
-      this.page
-        .locator("#notifivation-box-top")
-        .locator("div.toast m-3 fade show")
-        .first()
-    ).toHaveAttribute("role", "alert"); //type:Role , Atributo: Alert.
-
-        /*const unitNumberONE = await this.unitPriceProduct1.textContent();
-    const quantityNumberTWO =
-      await this.quantityProduct2.textContent();
-      const quantityNumberONE = await this.quantityProduct1.textContent();
-      const unitNumberTWO = await this.unitPriceProduct2.textContent();
-      
-      
-      
-      //////////////////////////////////////////////////////////////////////////////
-
-     // totalITEMS
-    for (let i = 0; i < await this.table.count(); i++) { // para hacerlo dinamico utilizamos el row.count
-      const quantity = await this.table
-        .nth(i)
-        .locator("td.text-left")
-        .nth(1)
-        .locator("div.input-group")
-        .locator('input[type="number"]')
-        .getAttribute("value");
-
-      console.log(`La cantidad es ${quantity}`);
-
-      const unitPrice = await this.table
-        .nth(i)
-        .locator("td.text-right")
-        .nth(1)
-        .innerText();
-
-      console.log(`La cantidad es ${unitPrice}`);
-
-      const quantityNumbONE = Number(quantity?.trim());
-
-      const unitNumbONE = parseFloat(unitPrice?.replace("$", "").trim() || "0"); // Convertir el texto a número decimal
-      console.log("Quantity:" + quantity);
-      console.log("Unit:" + unitPrice);
-      console.log("Parse:" + quantityNumbONE + "Unit" + unitNumbONE);
-
-      const subTotal = quantityNumbONE * unitNumbONE;
-      console.log("Subtotal:" + subTotal);
-      this.totalCart = this.totalCart + subTotal;
-    }
-
-    const envioLocator = await this.page.getByText("Flat Shipping Rate - $");
-    const envioText = await envioLocator.textContent();
-    const envioValue = parseFloat(envioText?.replace("Flat Shipping Rate - $", "").trim() || "0");
-    console.log("parseFloat:" + envioText?.replace("Flat Shipping Rate - $", "").trim());
-    this.totalCart = this.totalCart + envioValue;
-    console.log("EnvioValue:" + envioValue);
-    console.log("Envio Text:" + envioText);
-    console.log("type" + typeof this.totalCart);
-    console.log("Total Cart:" + this.totalCart);
-    const totalItemText = await this.totalItemLocator.textContent();
-    console.log("totalitemText:" + totalItemText);
-    this.totalItem = parseFloat(totalItemText?.replace("$", "").trim() || "0");
-    console.log(this.totalItem);
-    await this.page.pause();
-      */
